@@ -1,4 +1,4 @@
-import Sidebar from "./SIdebar";
+import Sidebar from "./Sidebar";
 import Header from "./Header";
 import './Layout.css';
 
