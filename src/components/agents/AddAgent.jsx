@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './AddAgent.css'; // Reusing the same styles
+import './AddAgent.css'; 
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -29,7 +29,7 @@ const AddAgent = () => {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:3000/api/agents', {
+      const response = await fetch('https://anvaya-backend-sigma.vercel.app/api/agents', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)

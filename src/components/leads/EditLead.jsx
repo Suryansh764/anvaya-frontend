@@ -23,7 +23,7 @@ const EditLead = () => {
   });
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/leads/${id}`)
+    fetch(`https://anvaya-backend-sigma.vercel.app/api/leads/${id}`)
       .then(res => {
         if (!res.ok) {
           if (res.status === 404) {

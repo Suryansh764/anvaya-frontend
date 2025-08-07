@@ -1,4 +1,3 @@
-// src/pages/AddLead.jsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AddLead.css';
@@ -48,7 +47,7 @@ const AddLead = () => {
         tags: formData.tags
       };
 
-      const response = await fetch('http://localhost:3000/api/leads', {
+      const response = await fetch('https://anvaya-backend-sigma.vercel.app/api/leads', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -58,7 +57,7 @@ const AddLead = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        toast.error(`❌ ${errorData.message || 'Failed to create lead'}`);
+        toast.error(` ${errorData.message || 'Failed to create lead'}`);
         throw new Error(errorData.message || 'Failed to create lead');
       }
 
