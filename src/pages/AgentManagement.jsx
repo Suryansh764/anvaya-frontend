@@ -17,7 +17,7 @@ const AgentManagement = () => {
     const refreshAgents = async () => {
       setAgentsLoading(true);
       try {
-        const res = await fetch('https://anvaya-frontend-dusky.vercel.app/api/agents');
+        const res = await fetch('https://anvaya-backend-sigma.vercel.app/api/agents');
         if (!res.ok) throw new Error('Failed to fetch agents');
         const data = await res.json();
         setAgents(data.data?.agents || []);
