@@ -1,0 +1,195 @@
+/* src/pages/AgentDetails.css */
+
+/* Reuse layout and card structure */
+.agent-detail-page {
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.agent-detail-card {
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+}
+
+/* Header */
+.agent-detail__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.agent-detail__name {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #111827;
+  margin: 0;
+}
+
+.agent-detail__header-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* Buttons */
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.btn--secondary {
+  background-color: white;
+  color: #374151;
+  border-color: #d1d5db;
+}
+
+.btn--secondary:hover {
+  background-color: #f9fafb;
+}
+
+/* Content sections */
+.agent-detail__content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.agent-detail__section {
+  padding-top: 1rem;
+}
+
+.section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+/* Info grid */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+.info-value {
+  font-size: 1rem;
+  color: #374151;
+}
+
+/* Tag list for leads */
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.tag-item {
+  background-color: #e9ecef;
+  color: #495057;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.tag-item:hover {
+  background-color: #dee2e6;
+  cursor: pointer;
+}
+
+/* Loading/Error messages */
+.loading-message,
+.error-message,
+.not-found-message {
+  text-align: center;
+  font-size: 1.125rem;
+  color: #6b7280;
+  padding: 2rem;
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .agent-detail-page {
+    padding: 1rem;
+  }
+
+  .agent-detail__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
+.filter-bar {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  font-size: 14px;
+}
+
+.filter-bar label {
+  font-size: 14px;
+}
+.lead-cards-container {
+  display: grid;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.lead-card {
+  background: #f9f9f9;
+  padding: 16px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.lead-card:hover {
+  background: #f1f1f1;
+}
+
+.lead-card__name {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.lead-card__info p {
+  margin: 4px 0;
+  font-size: 14px;
+}

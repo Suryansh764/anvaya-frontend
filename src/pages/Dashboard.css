@@ -1,0 +1,253 @@
+.dashboard {
+ padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.dashboard__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+.dashboard__title {
+ font-size: 2rem;
+  font-weight: bold;
+  color: #111827;
+  margin: 0;
+}
+
+.dashboard__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+  margin-bottom: 40px;
+  width: 100%;
+}
+
+.stat-card {
+  background-color: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border: 1px solid #e0e0e0;
+  transition: transform 0.2s, box-shadow 0.2s;
+  width: 100%;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.stat-card__title {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-card__value {
+  font-size: 36px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.stat-card__value--blue {
+  color: #2563eb;
+}
+
+.stat-card__value--yellow {
+  color: #d97706;
+}
+
+.stat-card__value--green {
+  color: #059669;
+}
+
+.dashboard__recent {
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border: 1px solid #e0e0e0;
+  width: 100%;
+}
+
+.dashboard__section-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.lead-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
+
+.lead-item {
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fafafa;
+  transition: background-color 0.2s;
+  width: 100%;
+}
+
+.lead-item:hover {
+  
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.lead-item__info {
+  flex: 1;
+}
+
+.lead-item__name {
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 8px 0;
+  font-size: 16px;
+}
+
+.lead-item__agent {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+.lead-item__status {
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.lead-item__status--new {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.lead-item__status--qualified {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.lead-item__status--contacted {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+.lead-item__status {
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+
+.lead-item__status--new {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.lead-item__status--contacted {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.lead-item__status--qualified {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.lead-item__status--proposal {
+  background-color: #e0e7ff;
+  color: #3730a3;
+}
+
+.lead-item__status--proposal-sent {
+  background-color: #e0e7ff;
+  color: #3730a3;
+}
+
+.lead-item__status--closed {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.lead-item__status--default {
+  background-color: #f3f4f6;
+  color: #6b7280;
+}
+
+
+@media (max-width: 1200px) {
+  .dashboard__stats {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard__stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .lead-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .lead-item__status {
+    align-self: flex-end;
+  }
+}
+
+.lead-item__tags {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag-badge {
+  background-color: #eef1f6;
+  color: #2c3e50;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-weight: 500;
+  border: 1px solid #dfe6ed;
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tag-badge--light {
+  background-color: #f4f4f4;
+  color: #999;
+  border: 1px dashed #ccc;
+}
+
+.custom-color {
+  background-color: #ed7c7c !important; 
+  border-color: #ed7c7c   !important;
+}
+
+.custom-color:hover {
+  background-color: #df4949 !important;
+  border-color: #df4949 !important;
+}
