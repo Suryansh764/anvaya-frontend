@@ -1,4 +1,3 @@
-// src/pages/LeadDetail.jsx
 import { useParams, useNavigate } from 'react-router-dom';
 import './LeadDetail.css';
 import { ToastContainer, toast } from 'react-toastify';
@@ -20,6 +19,7 @@ const LeadDetail = () => {
   const [newComment, setNewComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedAuthor, setSelectedAuthor] = useState('');
+  const [isDeleted, setIsDeleted] = useState(false); 
 
   const {
     allAgents,
@@ -34,6 +34,8 @@ const LeadDetail = () => {
   const agents = allAgents || [];
 
   useEffect(() => {
+    if (isDeleted) return; 
+
     const loadLead = async () => {
       setLeadLoading(true);
       const { lead, error } = await fetchSingleLead(id);
@@ -44,10 +46,13 @@ const LeadDetail = () => {
       }
       setLeadLoading(false);
     };
+
     loadLead();
-  }, [id, fetchSingleLead]);
+  }, [id, fetchSingleLead, isDeleted]);
 
   useEffect(() => {
+    if (isDeleted) return; 
+
     const getComments = async () => {
       const { comments, error } = await fetchLeadComments(id);
       if (error) {
@@ -57,15 +62,17 @@ const LeadDetail = () => {
       }
       setCommentsLoading(false);
     };
+
     getComments();
-  }, [id, fetchLeadComments]);
+  }, [id, fetchLeadComments, isDeleted]);
 
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this lead?")) {
       try {
         await deleteLead(id);
         toast.success("Lead deleted successfully");
-        setTimeout(() => navigate('/leads'), 1500);
+        setIsDeleted(true); 
+        setTimeout(() => navigate('/leads'), 1500); 
       } catch (err) {
         console.error('Delete error:', err);
         toast.error("Failed to delete the lead");
@@ -102,6 +109,16 @@ const LeadDetail = () => {
     return status.toLowerCase().replace(/\s+/g, '-');
   };
 
+  
+  if (isDeleted) {
+    return (
+      <div className="lead-detail-page">
+        <ToastContainer />
+        <p className="success-message">Lead deleted successfully. Redirecting...</p>
+      </div>
+    );
+  }
+
   if (loading || leadLoading || commentsLoading) {
     return <div className="lead-detail-page"><p className="loading-message">Loading lead details...</p></div>;
   }
@@ -124,7 +141,7 @@ const LeadDetail = () => {
           <h1 className="lead-detail__name">{lead.name}</h1>
           <div className="lead-detail__header-actions">
             <button onClick={handleEdit} className="btn btn-secondary custom-color__edit">Edit</button>
-            <button onClick={handleDelete} className="btn btn-primary ">Delete</button>
+            <button onClick={handleDelete} className="btn btn-primary">Delete</button>
           </div>
         </div>
 
