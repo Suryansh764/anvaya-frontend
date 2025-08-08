@@ -8,7 +8,7 @@ const LeadList = () => {
   const location = useLocation();
   const { state } = location;
 
-  const { allLeads, loading, error } = useAppContext(); 
+  const { allLeads,allAgents, loading, error } = useAppContext(); 
   const leads = allLeads || [];
 
   const [filterStatus, setFilterStatus] = useState('');
@@ -61,11 +61,7 @@ const filteredLeads = leads.filter(lead => {
     }
   });
 
- const uniqueAgents = [...new Set(
-  (leads || [])
-    .map(lead => lead?.salesAgent?.name)
-    .filter(Boolean)
-)];
+const uniqueAgents = allAgents?.map(agent => agent.name) || [];
 
   if (loading) {
     return (
@@ -153,7 +149,7 @@ const filteredLeads = leads.filter(lead => {
       <div className="lead-list__content">
         {sortedLeads.length === 0 ? (
           <div className="lead-list__empty">
-            <p>No leads found matching your filters.</p>
+            <p>No leads match the selected filters. Please try some other filter.</p>
           </div>
         ) : (
           sortedLeads.map(lead => {

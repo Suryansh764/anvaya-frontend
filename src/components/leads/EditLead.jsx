@@ -13,6 +13,7 @@ const EditLead = () => {
 
   const [lead, setLead] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({
     name: '',
     status: '',
@@ -45,7 +46,6 @@ const EditLead = () => {
           timeToClose: leadData.timeToClose || '',
           salesAgent: leadData.salesAgent?._id || ''
         });
-        toast.success('Lead data loaded successfully!');
         setLoading(false);
       })
       .catch((err) => {
@@ -61,24 +61,25 @@ const EditLead = () => {
           toast.error('Failed to fetch lead data');
         }
       });
-  }, [id]);
+  }, [id, navigate]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      await updateLead(id, form);
+     setIsSubmitting(true);
+     const { success, message } = await updateLead(id, form);
+     if (success) {
       toast.success('Lead updated successfully!');
       setTimeout(() => {
         navigate(`/leads/${id}`);
       }, 1500);
-    } catch (error) {
-      console.error(error);
-      toast.error('Failed to update lead');
+    } else {
+      toast.error(`${message}`);
     }
+    
   };
 
   return (
@@ -176,9 +177,10 @@ const EditLead = () => {
                 />
               </div>
 
-              <button type="submit" className="btn btn-primary custom-color">
-                Save Changes
-              </button>
+            
+          <button type="submit" className="btn btn-primary custom-color" disabled={isSubmitting}>
+            {isSubmitting ? 'Saving...' : 'Save Changes'}
+          </button>
             </form>
           </div>
         </>

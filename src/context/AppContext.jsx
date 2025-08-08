@@ -55,37 +55,41 @@ export const AppProvider = ({ children }) => {
     refetchReportData();
   }, [refetchReportData]);
 
-  const updateLead = async (id, updatedFields) => {
+  const updateLead = async (id, updatedData) => {
     try {
       const res = await fetch(`https://anvaya-backend-sigma.vercel.app/api/leads/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updatedFields),
+        body: JSON.stringify(updatedData),
       });
 
       if (!res.ok) throw new Error('Failed to update lead');
-
       const updatedLead = await res.json();
-      setAllLeads(prev =>
-        prev.map(lead => (lead._id === id ? updatedLead.data.lead : lead))
+
+      setAllLeads((prevLeads) =>
+        prevLeads.map((lead) => (lead._id === id ? updatedLead : lead))
       );
 
-      await refetchReportData(); 
-    } catch (err) {
-      console.error('Error updating lead:', err);
+      await refetchAllLeads();
+      await refetchReportData(); // ✅ instant report update
+
+      return { success: true, lead: updatedLead.data.lead };
+    } catch (error) {
+      console.error('Error updating lead:', error);
+      return { success: false, message: error.message };
     }
   };
 
   const refetchAllAgents = useCallback(async () => {
-  try {
-    const response = await fetch('https://anvaya-backend-sigma.vercel.app/api/agents');
-    const data = await response.json();
-    setAllAgents(data.data?.agents || []);
-  } catch (err) {
-    console.error('Error refetching agents:', err);
-  }
-}, []);
-
+    try {
+      const response = await fetch('https://anvaya-backend-sigma.vercel.app/api/agents');
+      const data = await response.json();
+      setAllAgents(data.data?.agents || []);
+      await refetchReportData(); // ✅ update reports if agent data changes
+    } catch (err) {
+      console.error('Error refetching agents:', err);
+    }
+  }, [refetchReportData]);
 
   const deleteLead = async (id) => {
     try {
@@ -96,23 +100,30 @@ export const AppProvider = ({ children }) => {
       if (!res.ok) throw new Error('Failed to delete lead');
 
       setAllLeads(prev => prev.filter(lead => lead._id !== id));
-      await refetchReportData(); 
+      await refetchReportData(); // ✅ update instantly
     } catch (err) {
       console.error('Error deleting lead:', err);
     }
   };
+
   const deleteAgent = async (id) => {
   try {
     const res = await fetch(`https://anvaya-backend-sigma.vercel.app/api/agents/${id}`, {
       method: 'DELETE',
     });
 
-    if (!res.ok) throw new Error('Failed to delete agent');
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.message || 'Failed to delete agent');
+    }
 
     setAllAgents(prev => prev.filter(agent => agent._id !== id));
-    await refetchReportData();
+    await refetchReportData(); // ✅ update instantly
+
+    return { success: true, message: 'Agent deleted successfully' };
   } catch (err) {
     console.error('Error deleting agent:', err);
+    return { success: false, message: err.message };
   }
 };
 
@@ -145,6 +156,9 @@ export const AppProvider = ({ children }) => {
       }
 
       const data = await response.json();
+
+      await refetchReportData(); // ✅ update if comments can change lead status
+
       return { newComment: data.data, error: null };
     } catch (error) {
       console.error('Error submitting comment:', error);
@@ -155,67 +169,71 @@ export const AppProvider = ({ children }) => {
   const fetchSingleLead = async (id) => {
     try {
       const res = await fetch(`https://anvaya-backend-sigma.vercel.app/api/leads/${id}`);
-      if (!res.ok) throw new Error('Failed to fetch lead');
+      if (res.status === 404) {
+        return { lead: null, error: null };
+      }
+      if (!res.ok) {
+        return { lead: null, error: null };
+      }
       const data = await res.json();
       return { lead: data.data.lead, error: null };
-    } catch (err) {
-      console.error('Error fetching single lead:', err);
-      return { lead: null, error: err.message };
+    } catch {
+      return { lead: null, error: null };
     }
   };
 
   const refetchAllLeads = useCallback(async () => {
-  try {
-    const response = await fetch('https://anvaya-backend-sigma.vercel.app/api/leads');
-    const data = await response.json();
-    setAllLeads(data.data?.leads || []);
-  } catch (err) {
-    console.error('Error refetching leads:', err);
-  }
-}, []);
-
-
-const fetchSingleAgent = async (id) => {
-  try {
-    const res = await fetch(`https://anvaya-backend-sigma.vercel.app/api/agents/${id}`);
-    if (!res.ok) throw new Error('Failed to fetch agent');
-    const data = await res.json();
-    return { agent: data.data.agent, error: null };
-  } catch (err) {
-    console.error('Error fetching agent:', err);
-    return { agent: null, error: err.message };
-  }
-};
-
-const updateAgent = async (id, updatedFields) => {
-  try {
-    const res = await fetch(`https://anvaya-backend-sigma.vercel.app/api/agents/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updatedFields),
-    });
-
-    if (!res.ok) {
-      const error = await res.json();
-      throw new Error(error.message || 'Failed to update agent');
+    try {
+      const response = await fetch('https://anvaya-backend-sigma.vercel.app/api/leads');
+      const data = await response.json();
+      setAllLeads(data.data?.leads || []);
+      await refetchReportData(); // ✅ update instantly after lead list changes
+    } catch (err) {
+      console.error('Error refetching leads:', err);
     }
+  }, [refetchReportData]);
 
-    const updatedAgent = await res.json();
+  const fetchSingleAgent = async (id) => {
+    try {
+      const res = await fetch(`https://anvaya-backend-sigma.vercel.app/api/agents/${id}`);
+      if (!res.ok) throw new Error('Failed to fetch agent');
+      const data = await res.json();
+      return { agent: data.data.agent, error: null };
+    } catch (err) {
+      console.error('Error fetching agent:', err);
+      return { agent: null, error: err.message };
+    }
+  };
 
-    setAllAgents(prev =>
-      prev.map(agent =>
-        agent._id === id ? updatedAgent.data.agent : agent
-      )
-    );
+  const updateAgent = async (id, updatedFields) => {
+    try {
+      const res = await fetch(`https://anvaya-backend-sigma.vercel.app/api/agents/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedFields),
+      });
 
-    await refetchReportData();
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message || 'Failed to update agent');
+      }
 
-    return { success: true, agent: updatedAgent.data.agent };
-  } catch (error) {
-    console.error('Error updating agent:', error);
-    return { success: false, message: error.message };
-  }
-};
+      const updatedAgent = await res.json();
+
+      setAllAgents(prev =>
+        prev.map(agent =>
+          agent._id === id ? updatedAgent.data.agent : agent
+        )
+      );
+
+      await refetchReportData(); // ✅ already present
+
+      return { success: true, agent: updatedAgent.data.agent };
+    } catch (error) {
+      console.error('Error updating agent:', error);
+      return { success: false, message: error.message };
+    }
+  };
 
   return (
     <AppContext.Provider
@@ -238,7 +256,6 @@ const updateAgent = async (id, updatedFields) => {
         refetchAllLeads,
         fetchSingleAgent,
         updateAgent
-        
       }}
     >
       {children}

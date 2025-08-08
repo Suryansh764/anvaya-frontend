@@ -13,13 +13,13 @@ const LeadDetail = () => {
   const [leadLoading, setLeadLoading] = useState(true);
   const [leadError, setLeadError] = useState(null);
 
+
   const [localComments, setLocalComments] = useState([]);
   const [commentsLoading, setCommentsLoading] = useState(true);
   const [commentsError, setCommentsError] = useState(null);
   const [newComment, setNewComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedAuthor, setSelectedAuthor] = useState('');
-  const [isDeleted, setIsDeleted] = useState(false); 
 
   const {
     allAgents,
@@ -34,25 +34,38 @@ const LeadDetail = () => {
   const agents = allAgents || [];
 
   useEffect(() => {
-    if (isDeleted) return; 
+  let isMounted = true;
 
-    const loadLead = async () => {
-      setLeadLoading(true);
-      const { lead, error } = await fetchSingleLead(id);
-      if (error) {
-        setLeadError(error);
-      } else {
-        setLead(lead);
-      }
-      setLeadLoading(false);
-    };
+  const loadLead = async () => {
+    setLeadLoading(true);
+    const { lead, error } = await fetchSingleLead(id);
+    if (!isMounted) return;
 
-    loadLead();
-  }, [id, fetchSingleLead, isDeleted]);
+   if (error) {
+  if (error.message === 'deleted') {
+    toast.success('🗑️ Lead deleted successfully!');
+    setTimeout(() => {
+      navigate('/leads', { state: { leadDeleted: true } });
+    }, 1800);
+  } else {
+    setLeadError(error);
+  }
+} else {
+  setLead(lead);
+}
+
+    setLeadLoading(false);
+  };
+
+  loadLead();
+
+  return () => {
+    isMounted = false; // stop state update on unmounted component
+  };
+}, [id, fetchSingleLead]);
+
 
   useEffect(() => {
-    if (isDeleted) return; 
-
     const getComments = async () => {
       const { comments, error } = await fetchLeadComments(id);
       if (error) {
@@ -62,23 +75,24 @@ const LeadDetail = () => {
       }
       setCommentsLoading(false);
     };
-
     getComments();
-  }, [id, fetchLeadComments, isDeleted]);
+  }, [id, fetchLeadComments]);
 
-  const handleDelete = async () => {
-    if (window.confirm("Are you sure you want to delete this lead?")) {
-      try {
-        await deleteLead(id);
-        toast.success("Lead deleted successfully");
-        setIsDeleted(true); 
-        setTimeout(() => navigate('/leads'), 1500); 
-      } catch (err) {
-        console.error('Delete error:', err);
-        toast.error("Failed to delete the lead");
-      }
+ const handleDelete = async () => {
+  if (window.confirm("Are you sure you want to delete this lead?")) {
+    try {
+      await deleteLead(id);
+      toast.success('🗑️ Lead deleted successfully!');
+      setTimeout(() => {
+        navigate('/leads', { state: { leadDeleted: true } });
+      }, 1800); // delay to let toast show
+    } catch (err) {
+      console.error('Delete error:', err);
+      toast.error('❌ Failed to delete the lead');
     }
-  };
+  }
+};
+
 
   const handleEdit = () => {
     navigate(`/leads/${id}/edit`);
@@ -109,16 +123,6 @@ const LeadDetail = () => {
     return status.toLowerCase().replace(/\s+/g, '-');
   };
 
-  
-  if (isDeleted) {
-    return (
-      <div className="lead-detail-page">
-        <ToastContainer />
-        <p className="success-message">Lead deleted successfully. Redirecting...</p>
-      </div>
-    );
-  }
-
   if (loading || leadLoading || commentsLoading) {
     return <div className="lead-detail-page"><p className="loading-message">Loading lead details...</p></div>;
   }
@@ -135,13 +139,23 @@ const LeadDetail = () => {
 
   return (
     <div className="lead-detail-page">
-      <ToastContainer />
+      <ToastContainer
+      position="top-right"
+      autoClose={2500}
+      hideProgressBar={false}
+      newestOnTop
+      closeOnClick
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="light"
+    />
       <div className="lead-detail-card">
         <div className="lead-detail__header">
           <h1 className="lead-detail__name">{lead.name}</h1>
           <div className="lead-detail__header-actions">
             <button onClick={handleEdit} className="btn btn-secondary custom-color__edit">Edit</button>
-            <button onClick={handleDelete} className="btn btn-primary">Delete</button>
+            <button onClick={handleDelete} className="btn btn-primary ">Delete</button>
           </div>
         </div>
 

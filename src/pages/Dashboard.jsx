@@ -93,7 +93,8 @@ const Dashboard = () => {
 
         <h2 className="dashboard__section-title">Recent Leads</h2>
         <div className="lead-list">
-          {[...filteredLeads]
+          {filteredLeads.length > 0 ? (
+             [...filteredLeads]
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
             .map(lead => (
               <Link
@@ -126,7 +127,13 @@ const Dashboard = () => {
                   </span>
                 </div>
               </Link>
-            ))}
+            ))
+          ):(
+            <p className="info-value">No leads match the selected filters. Please try some other filter.</p>
+          )}
+         
+              
+            
         </div>
       </div>
     </div>

@@ -2,6 +2,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useAppContext } from '../../context/AppContext';
 import './AgentDetails.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AgentDetails = () => {
   const { id } = useParams();
@@ -20,20 +22,26 @@ const AgentDetails = () => {
   const [priorityFilter, setPriorityFilter] = useState('All');
   const [sortOption, setSortOption] = useState('Newest');
 
-    useEffect(() => {
-  refetchAllAgents();
-}, [id, refetchAllAgents]);
+  useEffect(() => {
+    refetchAllAgents();
+  }, [id, refetchAllAgents]);
 
   const agent = allAgents.find(agent => agent._id === id);
   const leads = (allLeads || []).filter(lead => lead?.salesAgent?._id === id);
 
-
-
   const handleEdit = () => navigate(`/agents/${id}/edit`);
-  const handleDelete = async () => {
+
+ const handleDelete = async () => {
   if (window.confirm('Are you sure you want to delete this agent? This cannot be undone.')) {
-    await deleteAgent(id);
-    navigate('/agents'); 
+    const { success, message } = await deleteAgent(id);
+    if (success) {
+      toast.success(message);
+      setTimeout(() => {
+        navigate('/agents');
+      }, 1500);
+    } else {
+      toast.error(message);
+    }
   }
 };
 
@@ -67,10 +75,10 @@ const AgentDetails = () => {
     return <div className="lead-detail-page"><p className="not-found-message">Agent not found.</p></div>;
   }
 
-
-
   return (
     <div className="lead-detail-page">
+      <ToastContainer position="top-right" autoClose={2000} />
+
       <div className="lead-detail-card">
         <div className="lead-detail__header">
           <h1 className="lead-detail__name">{agent.name}</h1>
@@ -78,11 +86,9 @@ const AgentDetails = () => {
             <button onClick={handleEdit} className="btn btn-secondary custom-color__edit">Edit</button>
             <button onClick={handleDelete} className="btn btn-primary">Delete</button>
           </div>
-          
         </div>
 
         <div className="lead-detail__content">
-         
           <div className="lead-detail__section lead-detail__section--info">
             <h2 className="section-title">Agent Information</h2>
             <div className="info-grid">
@@ -93,21 +99,19 @@ const AgentDetails = () => {
             </div>
           </div>
 
-         
           <div className="lead-detail__section lead-detail__section--leads">
             <h2 className="section-title">Assigned Leads</h2>
 
-            
             <div className="filter-bar">
               <label>
                 Status:&nbsp;
                 <select className='form-select mb-3' value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-                  <option value="All">All</option>
+                  <option value="All">All Statuses</option>
                   <option value="New">New</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Closed">Closed</option>
-                  <option value="Qualified">Qualified</option>
                   <option value="Contacted">Contacted</option>
+                  <option value="Qualified">Qualified</option>
+                  <option value="Proposal Sent">Proposal Sent</option>
+                  <option value="Closed">Closed</option>
                 </select>
               </label>
 
@@ -131,7 +135,6 @@ const AgentDetails = () => {
               </label>
             </div>
 
-            
             {filteredAndSortedLeads.length > 0 ? (
               <div className="lead-cards-container">
                 {filteredAndSortedLeads.map((lead) => (
@@ -161,7 +164,7 @@ const AgentDetails = () => {
                 ))}
               </div>
             ) : (
-              <p className="info-value">No leads match the selected filters.</p>
+              <p className="info-value">No leads match the selected filters. Please try some other filter.</p>
             )}
           </div>
         </div>
