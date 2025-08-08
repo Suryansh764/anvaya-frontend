@@ -9,6 +9,7 @@ const LeadList = () => {
   const { state } = location;
 
   const { allLeads,allAgents, loading, error } = useAppContext(); 
+  
   const leads = allLeads || [];
 
   const [filterStatus, setFilterStatus] = useState('');

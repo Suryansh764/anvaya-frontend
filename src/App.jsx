@@ -36,7 +36,7 @@ function App() {
             <Route path="/agents/:id/edit" element={<EditAgent />} />
             <Route path="/agents/new" element={<AddAgent />} />
 
-
+            
           </Routes>
         </Layout>
        

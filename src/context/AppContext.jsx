@@ -71,7 +71,7 @@ export const AppProvider = ({ children }) => {
       );
 
       await refetchAllLeads();
-      await refetchReportData(); // ✅ instant report update
+      await refetchReportData(); 
 
       return { success: true, lead: updatedLead.data.lead };
     } catch (error) {
@@ -85,7 +85,7 @@ export const AppProvider = ({ children }) => {
       const response = await fetch('https://anvaya-backend-sigma.vercel.app/api/agents');
       const data = await response.json();
       setAllAgents(data.data?.agents || []);
-      await refetchReportData(); // ✅ update reports if agent data changes
+      await refetchReportData(); 
     } catch (err) {
       console.error('Error refetching agents:', err);
     }
@@ -100,7 +100,7 @@ export const AppProvider = ({ children }) => {
       if (!res.ok) throw new Error('Failed to delete lead');
 
       setAllLeads(prev => prev.filter(lead => lead._id !== id));
-      await refetchReportData(); // ✅ update instantly
+      await refetchReportData();
     } catch (err) {
       console.error('Error deleting lead:', err);
     }
@@ -118,7 +118,7 @@ export const AppProvider = ({ children }) => {
     }
 
     setAllAgents(prev => prev.filter(agent => agent._id !== id));
-    await refetchReportData(); // ✅ update instantly
+    await refetchReportData(); 
 
     return { success: true, message: 'Agent deleted successfully' };
   } catch (err) {
@@ -157,7 +157,7 @@ export const AppProvider = ({ children }) => {
 
       const data = await response.json();
 
-      await refetchReportData(); // ✅ update if comments can change lead status
+      await refetchReportData(); 
 
       return { newComment: data.data, error: null };
     } catch (error) {
@@ -187,7 +187,7 @@ export const AppProvider = ({ children }) => {
       const response = await fetch('https://anvaya-backend-sigma.vercel.app/api/leads');
       const data = await response.json();
       setAllLeads(data.data?.leads || []);
-      await refetchReportData(); // ✅ update instantly after lead list changes
+      await refetchReportData(); 
     } catch (err) {
       console.error('Error refetching leads:', err);
     }
@@ -226,7 +226,7 @@ export const AppProvider = ({ children }) => {
         )
       );
 
-      await refetchReportData(); // ✅ already present
+      await refetchReportData(); 
 
       return { success: true, agent: updatedAgent.data.agent };
     } catch (error) {
