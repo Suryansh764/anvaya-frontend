@@ -190,3 +190,29 @@
   margin: 4px 0;
   font-size: 14px;
 }
+.lead-tags {
+  margin-top: 8px;
+}
+
+.lead-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.lead-tag {
+  background-color: #e0f2fe; /* light blue */
+  color: #0369a1; /* darker blue text */
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  border: 1px solid #bae6fd;
+  transition: background-color 0.2s ease;
+}
+
+.lead-tag:hover {
+  background-color: #bae6fd;
+}

@@ -9,7 +9,9 @@ const EditLead = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const { updateLead, allAgents } = useAppContext();
+  const { updateLead, allAgents, allTags } = useAppContext();
+
+const availableTags = allTags || [];
 
   const [lead, setLead] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -20,7 +22,8 @@ const EditLead = () => {
     source: '',
     priority: '',
     timeToClose: '',
-    salesAgent: '' 
+    salesAgent: '',
+    tags: []  
   });
 
   useEffect(() => {
@@ -44,7 +47,8 @@ const EditLead = () => {
           source: leadData.source || '',
           priority: leadData.priority || '',
           timeToClose: leadData.timeToClose || '',
-          salesAgent: leadData.salesAgent?._id || ''
+          salesAgent: leadData.salesAgent?._id || '',
+          tags: leadData.tags ? leadData.tags.map(tag => tag._id) : []
         });
         setLoading(false);
       })
@@ -81,6 +85,15 @@ const EditLead = () => {
     }
     
   };
+
+  const handleTagToggle = (tagId) => {
+  setForm(prev => ({
+    ...prev,
+    tags: prev.tags.includes(tagId)
+      ? prev.tags.filter(id => id !== tagId)
+      : [...prev.tags, tagId]
+  }));
+};
 
   return (
     <div>
@@ -176,6 +189,24 @@ const EditLead = () => {
                   required
                 />
               </div>
+              <div className="form-group">
+  <label>Tags</label>
+  <div className="tag-checkboxes">
+    {availableTags.map(tag => (
+      <label key={tag._id} className="checkbox-label">
+        <input
+          type="checkbox"
+          className='me-2'
+          value={tag._id}
+          checked={form.tags.includes(tag._id)}
+          onChange={() => handleTagToggle(tag._id)}
+          disabled={isSubmitting}
+        />
+        {tag.name}
+      </label>
+    ))}
+  </div>
+</div>
 
             
           <button type="submit" className="btn btn-primary custom-color" disabled={isSubmitting}>

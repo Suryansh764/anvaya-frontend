@@ -32,11 +32,9 @@ const Dashboard = () => {
     return (
       <div className="dashboard">
         <h1 className="dashboard__title">Dashboard</h1>
-      
-      <div className="lead-detail-page">
-        <p className="error-message">Error loading dashboard: {error}</p>
-      </div>
-    
+        <div className="lead-detail-page">
+          <p className="error-message">Error loading dashboard: {error}</p>
+        </div>
       </div>
     );
   }
@@ -94,46 +92,43 @@ const Dashboard = () => {
         <h2 className="dashboard__section-title">Recent Leads</h2>
         <div className="lead-list">
           {filteredLeads.length > 0 ? (
-             [...filteredLeads]
-            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-            .map(lead => (
-              <Link
-                key={lead._id}
-                to={`/leads/${lead._id}`}
-                style={{ textDecoration: 'none', color: 'inherit' }}
-              >
-                <div className="lead-item">
-                  <div className="lead-item__info">
-                    <h3 className="lead-item__name">{lead.name}</h3>
-                    <p className="lead-item__agent">
-                      {lead.salesAgent ? `Assigned to ${lead.salesAgent.name}` : 'Unassigned'}
-                    </p>
+            [...filteredLeads]
+              .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+              .map(lead => (
+                <Link
+                  key={lead._id}
+                  to={`/leads/${lead._id}`}
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  <div className="lead-item">
+                    <div className="lead-item__info">
+                      <h3 className="lead-item__name">{lead.name}</h3>
+                      <p className="lead-item__agent">
+                        {lead.salesAgent ? `Assigned to ${lead.salesAgent.name}` : 'Unassigned'}
+                      </p>
 
-                    <div className="lead-item__tags">
-                      {lead.tags && lead.tags.length > 0 ? (
-                        lead.tags.map((tag, index) => (
-                          <span key={index} className="tag-badge">
-                            {typeof tag === 'string' ? tag : tag.name || 'Tag'}
-                          </span>
-                        ))
-                      ) : (
-                        <span className="tag-badge tag-badge--light">No Tags</span>
-                      )}
+                      <div className="lead-item__tags">
+                        {lead.tags && lead.tags.length > 0 ? (
+                          lead.tags.map((tag, index) => (
+                            <span key={index} className="tag-badge">
+                              {typeof tag === 'string' ? tag : tag.name || 'Tag'}
+                            </span>
+                          ))
+                        ) : (
+                          <span className="tag-badge tag-badge--light">No Tags</span>
+                        )}
+                      </div>
                     </div>
-                  </div>
 
-                  <span className={`lead-item__status lead-item__status--${lead.status?.toLowerCase() || 'default'}`}>
-                    {lead.status || 'Unknown'}
-                  </span>
-                </div>
-              </Link>
-            ))
-          ):(
+                    <span className={`lead-item__status lead-item__status--${lead.status?.toLowerCase().replace(/\s+/g, '-') || 'default'}`}>
+                      {lead.status || 'Unknown'}
+                    </span>
+                  </div>
+                </Link>
+              ))
+          ) : (
             <p className="info-value">No leads match the selected filters. Please try some other filter.</p>
           )}
-         
-              
-            
         </div>
       </div>
     </div>

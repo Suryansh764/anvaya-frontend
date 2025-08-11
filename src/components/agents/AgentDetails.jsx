@@ -152,13 +152,15 @@ const AgentDetails = () => {
                       )}
                       <p><strong>Created:</strong> {new Date(lead.createdAt).toLocaleDateString()}</p>
                       {lead.tags?.length > 0 && (
-                        <p>
-                          <strong>Tags:</strong>{' '}
-                          {lead.tags.map((tag, idx) => (
-                            <span key={idx} className="lead-tag">{tag.name}</span>
-                          ))}
-                        </p>
-                      )}
+  <div className="lead-tags">
+    
+    <div className="lead-tag-list">
+    <strong>Tags:</strong> {lead.tags.map((tag, idx) => (
+        <span key={idx} className="lead-tag">{tag.name}</span>
+      ))}
+    </div>
+  </div>
+)}
                     </div>
                   </div>
                 ))}
