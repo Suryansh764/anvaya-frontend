@@ -60,7 +60,7 @@ const LeadDetail = () => {
   loadLead();
 
   return () => {
-    isMounted = false; // stop state update on unmounted component
+    isMounted = false; 
   };
 }, [id, fetchSingleLead]);
 
@@ -85,7 +85,7 @@ const LeadDetail = () => {
       toast.success('🗑️ Lead deleted successfully!');
       setTimeout(() => {
         navigate('/leads', { state: { leadDeleted: true } });
-      }, 1800); // delay to let toast show
+      }, 1800); 
     } catch (err) {
       console.error('Delete error:', err);
       toast.error('❌ Failed to delete the lead');

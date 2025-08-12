@@ -1,4 +1,4 @@
-/* src/components/layout/Sidebar.css */
+
 .sidebar {
   width: 280px;
   background-color: white;
@@ -13,7 +13,7 @@
   transition: transform 0.3s cubic-bezier(.4,0,.2,1), width 0.3s cubic-bezier(.4,0,.2,1);
   transform: translateX(0);
   z-index: 200;
-  margin-right: 0; /* Ensure no margin */
+  margin-right: 0; 
 }
 
 .sidebar--collapsed {
@@ -23,7 +23,7 @@
   padding: 0;
   border: none;
 }
-/* Fixed collapse button at the top */
+
 
 
 .sidebar--collapsed * {
@@ -34,7 +34,7 @@
   padding: 25px 20px;
   border-bottom: 1px solid #e0e0e0;
   background-color: #f8f9fa;
-  margin: 0; /* Remove any margin */
+  margin: 0; 
 }
 
 .sidebar__header-content {
@@ -47,7 +47,7 @@
   font-size: 22px;
   font-weight: bold;
   color: #333;
-  margin: 0; /* Remove margin */
+  margin: 0; 
 }
 
 .sidebar__toggle-btn {
@@ -72,7 +72,7 @@
   flex-direction: column;
   gap: 8px;
   flex: 1;
-  margin: 0; /* Remove margin */
+  margin: 0; 
 }
 
 .sidebar__nav-item {
@@ -84,7 +84,7 @@
   color: #772525;
   transition: all 0.2s;
   border: 1px solid transparent;
-  margin: 0; /* Remove margin */
+  margin: 0; 
 }
 
 .sidebar__nav-item:hover {
@@ -115,21 +115,21 @@
   font-weight: 500;
   display: block;
   font-size: 14px;
-  margin: 0; /* Remove margin */
+  margin: 0; 
 }
 
 .sidebar__nav-description {
   font-size: 12px;
   color: #888;
   margin-top: 2px;
-  margin-bottom: 0; /* Remove margin */
+  margin-bottom: 0; 
 }
 
 .sidebar__footer {
   padding: 20px;
   border-top: 1px solid #e0e0e0;
   background-color: #f8f9fa;
-  margin: 0; /* Remove margin */
+  margin: 0; 
 }
 
 .sidebar__user {
